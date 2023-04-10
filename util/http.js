@@ -1,14 +1,19 @@
-import axios from 'axios';
+import axios from "axios";
 
 const BACKEND_URL =
-  'https://expenses-app-2f853-default-rtdb.europe-west1.firebasedatabase.app/';
+  "https://expenses-app-2f853-default-rtdb.europe-west1.firebasedatabase.app/";
 
-export function storeExpense(expenseData) {
-  axios.post(BACKEND_URL + '/expenses.json', expenseData);
+export async function storeExpense(expenseData) {
+  const response = await axios.post(
+    BACKEND_URL + "/expenses.json",
+    expenseData
+  );
+  const id = response.data.name;
+  return id;
 }
 
 export async function fetchExpenses() {
-  const response = await axios.get(BACKEND_URL + '/expenses.json');
+  const response = await axios.get(BACKEND_URL + "/expenses.json");
 
   const expenses = [];
 
@@ -17,7 +22,7 @@ export async function fetchExpenses() {
       id: key,
       amount: response.data[key].amount,
       date: new Date(response.data[key].date),
-      description: response.data[key].description
+      description: response.data[key].description,
     };
     expenses.push(expenseObj);
   }
